@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Large binary/output files
+*.pkl
+*.log
+*.zip
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.user
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Output directories
+visualization_results/
+test_detection_output/
+
+# Images (data files, not code)
+int_cam/
+tmp_img/
+
+# Claude
+.claude/
+
+# Pre-push anonymity audit: it lists real names on purpose, so it must
+# never be committed.
+check_anonymity.sh
+
+# Local-only deployment notes.
+DEPLOY.md

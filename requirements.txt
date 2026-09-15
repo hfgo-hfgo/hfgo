@@ -1,0 +1,33 @@
+# Hierarchical Factor Graph Optimization - Python Dependencies
+# Installation: pip install -r requirements.txt
+
+# GUI framework
+PySide6>=6.4.0
+
+# Core numerical computing
+numpy>=1.21.0,<2.0.0
+scipy>=1.7.0
+
+# Computer vision
+opencv-contrib-python>=4.5.0
+
+# AprilTag 3 marker detection (bundles libapriltag; only depends on numpy)
+pupil-apriltags>=1.0.4
+
+# Visualization
+matplotlib>=3.4.0
+
+# Image handling (imported directly in the GUI; do not rely on the
+# transitive install pulled in by matplotlib)
+Pillow>=8.0
+
+# YAML export in "Export Poses" (without it the export silently falls
+# back to JSON)
+PyYAML>=5.0
+
+# Optional: GPU-rendered pose scene ("🧊 Open3D View" button in the
+# Visualization tab). Everything else works without it.
+open3d>=0.17.0
+
+# Factor graph optimization
+gtsam>=4.1.0
