@@ -8,110 +8,211 @@
 <meta name="robots" content="noindex, nofollow">
 <style>
   :root{
-    --bg:#ffffff; --panel:#f7f8fa; --border:#e3e6ea;
-    --fg:#16191d; --muted:#5c646e; --accent:#2f5bd0; --accent-soft:#eaf0fe;
-    --code-bg:#f2f3f5;
+    --bg:#ffffff;
+    --fg:#14171a;
+    --muted:#6b737c;
+    --faint:#9aa2ab;
+    --rule:#e6e8eb;
+    --panel:#f7f8f9;
+    --accent:#1f4fd8;
+
+    --serif:"Source Serif 4","Iowan Old Style",Georgia,"Times New Roman",serif;
+    --sans:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
   }
   @media (prefers-color-scheme: dark){
     :root{
-      --bg:#0f1216; --panel:#161b21; --border:#262d36;
-      --fg:#e7eaee; --muted:#9aa4b0; --accent:#7ea6ff; --accent-soft:#182231;
-      --code-bg:#12171d;
+      --bg:#0e1013; --fg:#e8eaed; --muted:#98a1ab; --faint:#6f7780;
+      --rule:#23272d; --panel:#15181d; --accent:#7fa3ff;
     }
   }
+
   *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
   body{
     margin:0; background:var(--bg); color:var(--fg);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-    font-size:17px; line-height:1.65;
-    -webkit-font-smoothing:antialiased;
+    font-family:var(--serif); font-size:18px; line-height:1.72;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
   }
-  .wrap{max-width:860px; margin:0 auto; padding:0 20px}
-  a{color:var(--accent)}
+  .wrap{max-width:720px; margin:0 auto; padding:0 24px}
+  a{color:inherit}
 
-  .banner{
-    background:var(--accent-soft); border-bottom:1px solid var(--border);
-    color:var(--muted); font-size:14px; text-align:center; padding:10px 20px;
+  /* ── header ────────────────────────────────────────────── */
+  header{padding-block:64px 0; text-align:center}
+  .eyebrow{
+    font-family:var(--mono); font-size:11.5px; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--faint); margin:0 0 22px;
+  }
+  h1{
+    font-family:var(--sans); font-weight:700; font-size:40px; line-height:1.15;
+    letter-spacing:-.02em; margin:0 0 20px; text-wrap:balance;
+  }
+  .tagline{
+    font-size:19px; line-height:1.6; color:var(--muted);
+    margin:0 auto; max-width:30em; text-wrap:pretty;
   }
 
-  header{padding-block:56px 32px; text-align:center; border-bottom:1px solid var(--border)}
-  h1{font-size:34px; line-height:1.25; margin:0 0 18px; letter-spacing:-.01em}
-  .authors{color:var(--muted); font-size:16px; margin:0 0 6px}
-  .venue{color:var(--muted); font-size:15px; margin:0}
-
-  .links{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:26px}
-  .links a{
-    display:inline-block; text-decoration:none; color:var(--fg);
-    background:var(--panel); border:1px solid var(--border); border-radius:999px;
-    padding:8px 18px; font-size:15px;
+  /* ── pill links ────────────────────────────────────────── */
+  .pills{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:30px 0 0}
+  .pill{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--sans); font-size:14.5px; font-weight:500; text-decoration:none;
+    border:1px solid var(--rule); border-radius:999px; padding:9px 18px;
+    color:var(--fg); background:transparent; transition:border-color .15s, color .15s;
   }
-  .links a:hover{border-color:var(--accent); color:var(--accent)}
+  .pill:hover{border-color:var(--accent); color:var(--accent)}
+  .pill svg{width:15px; height:15px; flex:none; opacity:.7}
+  .pill .sub{font-family:var(--mono); font-size:11.5px; color:var(--faint); letter-spacing:.02em}
+  .pill[aria-disabled="true"]{opacity:.55; cursor:default}
+  .pill[aria-disabled="true"]:hover{border-color:var(--rule); color:var(--fg)}
 
-  section{padding-block:36px; border-bottom:1px solid var(--border)}
+  /* ── spec bar ──────────────────────────────────────────── */
+  .specs{
+    margin:38px 0 0; padding-block:20px;
+    border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);
+    display:flex; flex-wrap:wrap; justify-content:center; gap:10px 30px;
+  }
+  .spec{display:inline-flex; align-items:baseline; gap:8px}
+  .spec .k{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--faint); white-space:nowrap;
+  }
+  .spec .v{font-family:var(--sans); font-size:15px; font-weight:600; white-space:nowrap}
+
+  /* ── nav ───────────────────────────────────────────────── */
+  nav{
+    padding-block:20px; border-bottom:1px solid var(--rule);
+    display:flex; flex-wrap:wrap; justify-content:center; gap:8px 26px;
+  }
+  nav a{
+    font-family:var(--mono); font-size:11.5px; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--muted); text-decoration:none;
+  }
+  nav a:hover{color:var(--accent)}
+
+  /* ── sections ──────────────────────────────────────────── */
+  section{padding-block:52px; border-bottom:1px solid var(--rule)}
   section:last-of-type{border-bottom:none}
-  h2{font-size:22px; margin:0 0 16px; letter-spacing:-.01em}
-  h3{font-size:17px; margin:24px 0 8px; letter-spacing:-.005em}
-  p{margin:0 0 14px}
-  ul{margin:0 0 14px; padding-left:22px}
-  li{margin:0 0 7px}
-
-  figure{margin:0 0 20px}
-  figure img{display:block; width:100%; height:auto; border:1px solid var(--border); border-radius:8px; background:var(--panel)}
-  figcaption{color:var(--muted); font-size:14.5px; margin-top:10px}
-
-  .video-box{position:relative; width:100%; aspect-ratio:16/9; max-width:100%; background:var(--panel);
-             border:1px solid var(--border); border-radius:8px; overflow:hidden}
-  .video-box video{width:100%; height:100%; display:block}
-
-  .stages{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin:0 0 18px}
-  .stage{background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:14px 16px}
-  .stage .num{color:var(--accent); font-size:13px; font-weight:600; letter-spacing:.04em; text-transform:uppercase}
-  .stage h4{margin:4px 0 8px; font-size:16px}
-  .stage p{margin:0; color:var(--muted); font-size:14.5px; line-height:1.55}
-
-  .table-scroll{overflow-x:auto; -webkit-overflow-scrolling:touch}
-  table{border-collapse:collapse; width:100%; font-size:15px; min-width:420px}
-  th,td{border:1px solid var(--border); padding:9px 12px; text-align:right}
-  th:first-child, td:first-child{text-align:left}
-  thead th{background:var(--panel); font-weight:600}
-
-  pre{background:var(--code-bg); border:1px solid var(--border); border-radius:8px;
-      padding:14px 16px; overflow-x:auto; font-size:14px; line-height:1.5; margin:0 0 14px}
-  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-  p code, li code, td code{background:var(--code-bg); border-radius:4px; padding:1px 5px; font-size:14px}
-
-  .todo{background:#fff4d6; color:#5a4200; border:1px dashed #d9b45a;
-        border-radius:6px; padding:2px 8px; font-size:14px; font-weight:600}
-  @media (prefers-color-scheme: dark){
-    .todo{background:#3a2f12; color:#f0d79a; border-color:#7a6528}
+  h2{
+    font-family:var(--sans); font-weight:600; font-size:25px; letter-spacing:-.015em;
+    margin:0 0 20px;
   }
-  .note{color:var(--muted); font-size:14.5px; margin-top:12px}
+  h3{
+    font-family:var(--sans); font-weight:600; font-size:17px; letter-spacing:-.005em;
+    margin:34px 0 10px;
+  }
+  p{margin:0 0 17px; text-wrap:pretty}
+  p:last-child{margin-bottom:0}
+  ul{margin:0 0 17px; padding-left:24px}
+  li{margin:0 0 9px}
+  strong{font-weight:600}
 
-  footer{padding-block:28px 48px; color:var(--muted); font-size:14px; text-align:center}
+  .lede{font-size:19.5px; line-height:1.66}
 
-  @media (max-width:520px){
-    body{font-size:16px}
-    h1{font-size:26px}
-    header{padding-block:36px 24px}
+  /* ── stage cards ───────────────────────────────────────── */
+  .stages{display:grid; gap:1px; background:var(--rule); border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin:0 0 26px}
+  @media (min-width:640px){ .stages{grid-template-columns:repeat(3,1fr)} }
+  .stage{background:var(--bg); padding:20px 20px 22px}
+  .stage .n{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--faint);
+  }
+  .stage h4{font-family:var(--sans); font-weight:600; font-size:16px; margin:6px 0 9px}
+  .stage p{font-size:15.5px; line-height:1.6; color:var(--muted); margin:0}
+
+  /* ── figures, media, tables ────────────────────────────── */
+  figure{margin:0 0 24px}
+  figure img{display:block; width:100%; height:auto; border:1px solid var(--rule); border-radius:10px; background:var(--panel)}
+  figcaption{font-size:15px; line-height:1.6; color:var(--muted); margin-top:12px}
+
+  .media{
+    width:100%; aspect-ratio:16/9; background:var(--panel);
+    border:1px solid var(--rule); border-radius:10px; overflow:hidden;
+  }
+  .media video{width:100%; height:100%; display:block}
+
+  .scroll{overflow-x:auto; -webkit-overflow-scrolling:touch; margin:0 0 17px}
+  table{border-collapse:collapse; width:100%; font-size:15.5px; min-width:440px; font-family:var(--sans)}
+  th,td{border-bottom:1px solid var(--rule); padding:11px 14px; text-align:right}
+  th:first-child, td:first-child{text-align:left}
+  thead th{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.11em; text-transform:uppercase;
+    color:var(--faint); font-weight:400; border-bottom:1px solid var(--rule);
+  }
+  tbody tr:last-child td{border-bottom:none}
+
+  pre{
+    background:var(--panel); border:1px solid var(--rule); border-radius:10px;
+    padding:16px 18px; overflow-x:auto; margin:0 0 17px;
+  }
+  pre code{font-family:var(--mono); font-size:13.5px; line-height:1.6}
+  p code, li code, td code{font-family:var(--mono); font-size:14.5px; background:var(--panel); border-radius:4px; padding:1px 6px}
+
+  /* ── todo marker ───────────────────────────────────────── */
+  .todo{
+    font-family:var(--mono); font-size:10.5px; font-weight:500; letter-spacing:.1em;
+    text-transform:uppercase; background:#fff3cf; color:#6a4e00;
+    border:1px dashed #d9bb63; border-radius:5px; padding:2px 7px; white-space:nowrap;
+  }
+  @media (prefers-color-scheme: dark){
+    .todo{background:#332a10; color:#e9cf94; border-color:#6e5a25}
+  }
+  .note{font-size:15px; line-height:1.6; color:var(--muted); margin-top:14px}
+
+  footer{
+    padding-block:34px 60px; text-align:center;
+    font-family:var(--mono); font-size:11.5px; letter-spacing:.06em; color:var(--faint);
+  }
+
+  @media (max-width:560px){
+    body{font-size:17px}
+    h1{font-size:30px}
+    header{padding-block:44px 0}
+    section{padding-block:40px}
+    .specs{gap:10px 20px}
   }
 </style>
 </head>
 <body>
-
-<div class="banner">This page is anonymized for double-anonymous review. It contains supplementary material only.</div>
-
 <div class="wrap">
 
   <header>
+    <p class="eyebrow">Anonymous submission &middot; Under review</p>
     <h1><span class="todo">TODO</span> Paper Title Goes Here</h1>
-    <p class="authors">Anonymous Authors</p>
-    <p class="venue">Paper under double-anonymous review &middot; IEEE ICRA 2027 submission</p>
+    <p class="tagline">
+      Hierarchical factor graph calibration of a multi-camera vehicle rig, with
+      per-observation pose covariance propagated from image-corner uncertainty.
+    </p>
 
-    <nav class="links">
+    <div class="pills">
+      <a class="pill" href="#" aria-disabled="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+        Paper <span class="sub">under review</span>
+      </a>
+      <a class="pill" href="#code">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg>
+        Code
+      </a>
+      <a class="pill" href="#videos">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>
+        Video
+      </a>
+    </div>
+
+    <div class="specs">
+      <span class="spec"><span class="k">Stages</span><span class="v">3</span></span>
+      <span class="spec"><span class="k">Solver</span><span class="v">GTSAM LM</span></span>
+      <span class="spec"><span class="k">Target</span><span class="v">AprilGrid 2&times;2</span></span>
+      <span class="spec"><span class="k">Cameras</span><span class="v"><span class="todo">TODO</span></span></span>
+      <span class="spec"><span class="k">Site</span><span class="v"><span class="todo">TODO</span></span></span>
+    </div>
+
+    <nav>
       <a href="#abstract">Abstract</a>
+      <a href="#introduction">Introduction</a>
       <a href="#method">Method</a>
-      <a href="#video">Video</a>
-      <a href="#results">Results</a>
+      <a href="#experiments">Experiments</a>
+      <a href="#videos">Videos</a>
       <a href="#code">Code</a>
       <a href="#bibtex">BibTeX</a>
     </nav>
@@ -119,84 +220,87 @@
 
   <section id="abstract">
     <h2>Abstract</h2>
-    <p><span class="todo">TODO</span> Paste the paper abstract here, verbatim and with no author- or
-    institution-identifying wording.</p>
+    <p class="lede"><span class="todo">TODO</span> Paste the paper abstract here, verbatim, with no
+    author- or institution-identifying wording.</p>
+  </section>
+
+  <section id="introduction">
+    <h2>Introduction</h2>
+    <p>Calibrating a multi-camera rig against a marker field is usually posed as one large bundle
+    problem in which every marker pose and every camera pose is estimated at once. The cameras on a
+    vehicle, however, rarely share a view: a forward telephoto and a rear fisheye may never observe the
+    same board, so the estimate that ties them together is carried entirely by the marker map between
+    them.</p>
+
+    <p>This work separates that map from the cameras that use it. The marker field is solved first and
+    then held fixed, so each vehicle camera is registered against a reference that does not move while
+    it is being estimated. What the map is worth is then a question about the observations that built
+    it, which is where the second element comes in: each marker observation carries a full pose
+    covariance derived from the image, not a hand-tuned scalar weight.</p>
+
+    <p><span class="todo">TODO</span> Replace or extend with the paper's own framing, and state the
+    contribution claims in the same words the paper uses.</p>
   </section>
 
   <section id="method">
-    <h2>Method Overview</h2>
+    <h2>Method</h2>
 
-    <p>Extrinsic calibration of a multi-camera rig is solved as a sequence of factor graphs rather
-    than one joint problem. Each stage estimates a smaller set of variables against the result of
-    the previous stage, which is held fixed, so the marker map is established before any vehicle
-    camera is introduced.</p>
+    <p>Three stages run in order. Each one treats the output of the previous stage as fixed, so the
+    variables being solved shrink as the reference they are solved against becomes better determined.</p>
 
     <div class="stages">
       <div class="stage">
-        <div class="num">Stage 1</div>
+        <div class="n">Stage 1</div>
         <h4>Environment markers</h4>
-        <p>AprilTag boards observed by the environment camera are merged per board, their relative
-        poses collected as marker-to-marker pairs, and the marker map is solved with
-        Levenberg&ndash;Marquardt.</p>
+        <p>Tag detections are merged per board, relative poses are collected as marker-to-marker pairs,
+        and the marker map is solved with Levenberg&ndash;Marquardt.</p>
       </div>
       <div class="stage">
-        <div class="num">Stage 2</div>
+        <div class="n">Stage 2</div>
         <h4>Wheel markers</h4>
-        <p>Wheel-board observations are added on top of the frozen environment map, extending it
-        with the markers that define the vehicle frame.</p>
+        <p>Wheel-board observations extend the frozen environment map with the markers that define the
+        vehicle frame.</p>
       </div>
       <div class="stage">
-        <div class="num">Stage 3</div>
+        <div class="n">Stage 3</div>
         <h4>Vehicle cameras</h4>
-        <p>Each vehicle camera is introduced as a new node against the frozen marker map, and its
-        extrinsics are reported in the vehicle frame.</p>
+        <p>Each camera enters as a new node against the frozen map, and its extrinsics are reported in
+        the vehicle frame.</p>
       </div>
     </div>
 
     <figure>
       <img src="assets/method_overview.png" alt="Method overview diagram">
-      <figcaption><span class="todo">TODO</span> Figure caption. Use the same figure as in the paper, with
-      institution marks removed.</figcaption>
+      <figcaption><span class="todo">TODO</span> Figure caption. Use the same figure as in the paper,
+      with institution marks removed.</figcaption>
     </figure>
 
     <h3>Observation uncertainty</h3>
-    <p>Every observation carries a full 6&times;6 pose covariance instead of a hand-tuned scalar weight.
+    <p>Every observation carries a full 6&times;6 pose covariance instead of a scalar weight.
     Corner-level uncertainty is estimated from the image structure tensor, then propagated through the
-    perspective-n-point solve by an unscented transform. The resulting covariance, off-diagonal terms
-    included, is passed to the solver unchanged, so a marker seen at a shallow angle or far from the
-    image centre contributes proportionally less.</p>
+    perspective-n-point solve by an unscented transform. The resulting covariance reaches the solver
+    unchanged, off-diagonal correlation terms included, so a board seen at a shallow angle or far from
+    the image centre contributes proportionally less than one seen square-on and close.</p>
 
     <h3>Observation filtering</h3>
     <p>Outliers are removed one observation at a time rather than by discarding whole images.</p>
     <ul>
       <li>Marker pairs co-observed fewer times than a threshold are dropped, and only the observations
-      of the less-observed marker in that pair are removed.</li>
-      <li>Vehicle observations that disagree with the frozen marker map beyond a rotation and
+      of the less-observed marker in that pair are removed. A marker left with no pairs falls out of
+      the optimization.</li>
+      <li>Vehicle observations that disagree with the frozen marker map beyond a rotation and a
       translation threshold are excluded before the solve.</li>
     </ul>
 
-    <p class="note">Both pinhole and fisheye (Kannala&ndash;Brandt) camera models are supported, so a rig
-    that mixes wide-angle and telephoto units is handled in a single run.</p>
+    <h3>Camera models</h3>
+    <p>Pinhole and fisheye (Kannala&ndash;Brandt) cameras are handled in the same run, so a rig mixing
+    wide-angle and telephoto units needs no separate pass.</p>
   </section>
 
-  <section id="video">
-    <h2>Supplementary Video</h2>
-    <div class="video-box">
-      <video controls preload="metadata" poster="assets/video_poster.jpg">
-        <source src="assets/supplementary.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-    </div>
-    <p class="note">
-      <span class="todo">TODO</span> Put <code>supplementary.mp4</code> in <code>assets/</code>, or delete this
-      section. Check that no logos, faces, name tags, or license plates appear in any frame.
-    </p>
-  </section>
+  <section id="experiments">
+    <h2>Experiments</h2>
 
-  <section id="results">
-    <h2>Additional Results</h2>
-
-    <div class="table-scroll">
+    <div class="scroll">
       <table>
         <thead>
           <tr><th>Method</th><th>Metric A</th><th>Metric B</th></tr>
@@ -207,22 +311,31 @@
         </tbody>
       </table>
     </div>
-    <p class="note">
-      <span class="todo">TODO</span> Replace with real numbers, or remove the table. Do not let dataset names
-      or file paths in this table reveal a lab, a host name, or a user directory.
-    </p>
+    <p class="note"><span class="todo">TODO</span> Replace with the real table, or remove the section.
+    Check that no dataset name, host name, or user directory appears in any cell.</p>
+  </section>
+
+  <section id="videos">
+    <h2>Videos</h2>
+    <div class="media">
+      <video controls preload="metadata" poster="assets/video_poster.jpg">
+        <source src="assets/supplementary.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    <p class="note"><span class="todo">TODO</span> Put <code>supplementary.mp4</code> in
+    <code>assets/</code>, or delete this section. Watch it end to end first: logos, faces, name tags,
+    license plates and a visible building all identify the group.</p>
   </section>
 
   <section id="code">
     <h2>Code</h2>
-    <p>The calibration tool is released as an anonymized repository: a graphical front end, the factor
-    graph engine, the uncertainty propagation, and the configuration module. Datasets are not included;
-    image directories are supplied through the configuration.</p>
+    <p>The calibration tool is released in full: the graphical front end, the factor graph engine, the
+    uncertainty propagation, and the configuration module. Datasets are not included &mdash; image
+    directories are supplied through the configuration at run time.</p>
     <p>This page is served from that repository, so the code sits one level up from here.</p>
     <pre><code>Repository: https://github.com/&lt;anon-account&gt;/&lt;anon-repo&gt;</code></pre>
-    <p class="note">
-      <span class="todo">TODO</span> Replace the placeholder with the repository URL once it exists.
-    </p>
+    <p class="note"><span class="todo">TODO</span> Replace the placeholder with the repository URL.</p>
   </section>
 
   <section id="bibtex">
@@ -236,7 +349,7 @@
   </section>
 
   <footer>
-    Anonymous supplementary page &middot; no tracking, no analytics, no external requests.
+    Anonymous supplementary page &middot; no tracking, no analytics, no external requests
   </footer>
 
 </div>
