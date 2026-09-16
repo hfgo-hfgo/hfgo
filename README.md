@@ -5,6 +5,8 @@ Optimization (FGO) with a PySide6 GUI.
 Optimization runs in three stages — environment markers, wheel markers, then
 vehicle cameras — and each stage weights its factors with MARSCOT uncertainty.
 
+![Calibration tool GUI](GUI_img.png)
+
 ---
 
 ## 📁 Project Structure
@@ -29,6 +31,21 @@ hierarchical_fgo/
 ---
 
 ## 🚀 Quick Start
+
+### 0. Requirements
+
+| Item | Version |
+|------|---------|
+| Python | **3.11** (developed and tested); 3.9 – 3.12 expected to work but untested |
+| OS | Windows / Linux / macOS |
+
+> Python 3.13 and newer are not supported: the pinned `numpy>=1.21.0,<2.0.0`
+> tops out at numpy 1.26.x, which publishes no 3.13 wheels.
+
+```bash
+conda create -n hierarchical_fgo python=3.11
+conda activate hierarchical_fgo
+```
 
 ### 1. Install dependencies
 
@@ -96,6 +113,51 @@ python main.py
 | 6 | **🌍 Environment** | Run Stage 1; the marker pose window pops up when it finishes |
 | 7 | **🚗 Extrinsic** | Load Stage 1, then run Stage 2 and Stage 3 |
 | 8 | **Export Poses** | Save the vehicle camera poses (.txt / .json / .yaml — falls back to JSON when PyYAML is absent) |
+
+---
+
+## 🎯 Marker Board Geometry
+
+![AprilGrid layout and AprilTag geometry](apriltag_figure.png)
+
+Both the environment and the wheel targets are **2 x 2 AprilGrid boards** of the
+`tagStandard41h12` family. That family draws a reversed border, so the square the
+detector reports as the tag corners (`width_at_border` = 5 cells) sits *inside*
+the full printed pattern (`total_width` = 9 cells) — panel (b).
+
+> **`marker_size` holds a half-length.** `CalibrationConfig.marker_size` and
+> `marker_size2` store **half** the side of the detection square, not the whole
+> side and not the outer printed extent. `tag_gap` is measured between the
+> detection squares of neighbouring tags, as drawn in panel (a).
+
+Values as configured for the simulation, in meters:
+
+| Figure label | Derived from | Environment board | Wheel board |
+|--------------|--------------|------------------:|------------:|
+| Tag size (detection square) | `2 x marker_size` / `2 x marker_size2` | 0.197531 | 0.123457 |
+| Cell size | tag size / `width_at_border` (5) | 0.039506 | 0.024691 |
+| Outer tag extent | cell size x `total_width` (9) | 0.355556 | 0.222222 |
+| Spacing between detection squares | `env_tag_gap` / `wheel_tag_gap` | 0.246914 | 0.154321 |
+| Center-to-center distance | tag size + spacing | 0.444445 | 0.277778 |
+| **Board size** | center-to-center + outer tag extent | **0.800000** | **0.500000** |
+
+The board sizes are the quantities that were actually set in the simulator
+(0.8 m and 0.5 m); every other row above is a consequence of them. The stored
+`tag_gap` values are rounded to six decimals, which is why the board size
+reproduces as 0.8000004 rather than exactly 0.8.
+
+Board and tag ID assignment:
+
+| Item | Config field | Value |
+|------|--------------|-------|
+| Tag family | `apriltag_family` | `tagStandard41h12` |
+| Board grid | `env_grid_rows` x `env_grid_cols` | 2 x 2 (wheel boards likewise) |
+| First environment board | `env_first_tag_id` | `10` (IDs 10–13, as drawn in panel (a)) |
+| World-origin board | `first_marker_id` | `10` |
+| Wheel board IDs [fl, rl, rr, fr] | `vehicle_markers` | `[74, 78, 86, 82]` |
+
+A board's ID is the smallest tag ID printed on it, and tags fill the grid
+row-major from the top-left slot.
 
 ---
 

@@ -42,3 +42,7 @@ check_anonymity.sh
 
 # Local-only deployment notes.
 DEPLOY.md
+
+# Figure source exported from PowerPoint: its PDF metadata carries a real
+# author name, so only the rasterized PNG is committed.
+*.pdf

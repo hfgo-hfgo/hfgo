@@ -32,8 +32,11 @@ class CalibrationConfig:
         # ============================================================================
         # Marker settings
         # ============================================================================
-        self.marker_size = 0.098765432  # half of marker size (for environment markers)
-        self.marker_size2 = 0.061728395  # half of marker size (for vehicle wheel markers)
+        # Half the side of the square the detector reports as the tag corners
+        # (width_at_border), NOT the full printed extent. See the "Marker Board
+        # Geometry" section of README.md for how these map onto a printed board.
+        self.marker_size = 0.098765432  # environment markers  -> 0.8 m board
+        self.marker_size2 = 0.061728395  # vehicle wheel markers -> 0.5 m board
 
         # ============================================================================
         # AprilTag / AprilGrid settings (AprilTag 3 detector)
@@ -52,7 +55,8 @@ class CalibrationConfig:
 
         # Board layout: n×m AprilTags are printed on one physical marker board.
         # board_id = min(tag_ids_on_board) = first_tag_id + group_index * (rows*cols)
-        # tag_gap is the printed gap between neighbouring tag edges, in meters.
+        # tag_gap is the printed gap between the detection squares of neighbouring
+        # tags, in meters -- not between their outer printed edges.
         self.env_grid_rows    = 2
         self.env_grid_cols    = 2
         self.env_tag_gap      = 0.246914
