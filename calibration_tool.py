@@ -999,6 +999,16 @@ class PathSelector(QMainWindow):
             common = os.path.commonpath(dirs)
         except ValueError:
             return "(mixed locations)"
+
+        # Show it relative to the project root when the images live inside it:
+        # the absolute form carries the user's home directory into every
+        # screenshot of this panel.
+        try:
+            relative = os.path.relpath(common, self.project_root)
+            if not relative.startswith(os.pardir):
+                common = relative.replace(os.sep, '/')
+        except ValueError:
+            pass
         n_cams = sum(1 for vc in self.config.vehicle_camera_configs if vc.get('images'))
         return f"{common}/  ({len(paths)} images, {n_cams} cameras)"
 
