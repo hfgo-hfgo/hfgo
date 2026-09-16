@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Uncertainty-Aware Hierarchical FGO for Multi-Camera Extrinsic Calibration</title>
+<meta name="description" content="Anonymous supplementary project page for an ICRA 2027 submission on uncertainty-aware hierarchical factor graph optimization for multi-camera-to-vehicle extrinsic calibration.">
+<meta name="robots" content="noindex, nofollow">
+<style>
+  :root{
+    --bg:#ffffff; --panel:#f7f8fa; --border:#e3e6ea;
+    --fg:#16191d; --muted:#5c646e; --accent:#2f5bd0; --accent-soft:#eaf0fe;
+    --code-bg:#f2f3f5;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0f1216; --panel:#161b21; --border:#262d36;
+      --fg:#e7eaee; --muted:#9aa4b0; --accent:#7ea6ff; --accent-soft:#182231;
+      --code-bg:#12171d;
+    }
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--fg);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:17px; line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:900px; margin:0 auto; padding:0 20px}
+  a{color:var(--accent)}
+
+  .banner{
+    background:var(--accent-soft); border-bottom:1px solid var(--border);
+    color:var(--muted); font-size:14px; text-align:center; padding:10px 20px;
+  }
+
+  header{padding-block:56px 32px; text-align:center; border-bottom:1px solid var(--border)}
+  h1{font-size:34px; line-height:1.25; margin:0 0 18px; letter-spacing:-.01em}
+  .authors{color:var(--muted); font-size:16px; margin:0 0 6px}
+  .venue{color:var(--muted); font-size:15px; margin:0}
+
+  .links{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:26px}
+  .links a{
+    display:inline-block; text-decoration:none; color:var(--fg);
+    background:var(--panel); border:1px solid var(--border); border-radius:999px;
+    padding:8px 18px; font-size:15px;
+  }
+  .links a:hover{border-color:var(--accent); color:var(--accent)}
+
+  section{padding-block:36px; border-bottom:1px solid var(--border)}
+  section:last-of-type{border-bottom:none}
+  h2{font-size:22px; margin:0 0 16px; letter-spacing:-.01em}
+  h3{font-size:17px; margin:26px 0 10px; letter-spacing:-.005em}
+  p{margin:0 0 14px}
+  ul,ol{margin:0 0 14px; padding-left:22px}
+  li{margin:0 0 7px}
+
+  figure{margin:0 0 20px}
+  figure img{display:block; width:100%; height:auto; border:1px solid var(--border); border-radius:8px; background:var(--panel)}
+  figcaption{color:var(--muted); font-size:14.5px; margin-top:10px}
+
+  .video-box{position:relative; width:100%; max-width:100%; background:var(--panel);
+             border:1px solid var(--border); border-radius:8px; overflow:hidden;
+             display:flex; align-items:center; justify-content:center; text-align:center}
+  .video-box:has(video){aspect-ratio:16/9}
+  .video-box video{width:100%; height:100%; display:block}
+  .video-box .placeholder{color:var(--muted); font-size:15px; padding:44px 24px; margin:0}
+
+  .table-scroll{overflow-x:auto; -webkit-overflow-scrolling:touch; margin-bottom:12px}
+  table{border-collapse:collapse; width:100%; font-size:14.5px; min-width:520px}
+  th,td{border:1px solid var(--border); padding:8px 11px; text-align:right; white-space:nowrap}
+  th:first-child, td:first-child{text-align:left}
+  th.l, td.l{text-align:left; white-space:normal}
+  thead th{background:var(--panel); font-weight:600}
+  tbody td.best{font-weight:700}
+  caption{caption-side:top; text-align:left; color:var(--fg); font-weight:600;
+          font-size:15px; padding-bottom:8px}
+
+  .note{color:var(--muted); font-size:14.5px; margin:0 0 20px}
+
+  pre{background:var(--code-bg); border:1px solid var(--border); border-radius:8px;
+      padding:14px 16px; overflow-x:auto; font-size:14px; line-height:1.5; margin:0}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  p code, li code, td code, figcaption code{background:var(--code-bg); border-radius:4px;
+      padding:1px 5px; font-size:.92em}
+
+  .todo{background:#fff4d6; color:#5a4200; border:1px dashed #d9b45a;
+        border-radius:6px; padding:2px 8px; font-size:14px; font-weight:600}
+  @media (prefers-color-scheme: dark){
+    .todo{background:#3a2f12; color:#f0d79a; border-color:#7a6528}
+  }
+
+  footer{padding-block:28px 48px; color:var(--muted); font-size:14px; text-align:center}
+
+  @media (max-width:520px){
+    body{font-size:16px}
+    h1{font-size:26px}
+    header{padding-block:36px 24px}
+  }
+</style>
+</head>
+<body>
+
+<div class="banner">This page is anonymized for double-anonymous review. It contains supplementary material only.</div>
+
+<div class="wrap">
+
+  <header>
+    <h1>Uncertainty-Aware Hierarchical Factor Graph Optimization<br>for Multi-Camera Extrinsic Calibration of Autonomous Vehicles</h1>
+    <p class="authors">Anonymous Authors</p>
+    <p class="venue">Paper under double-anonymous review &middot; IEEE ICRA 2027 submission</p>
+
+    <nav class="links">
+      <a href="#abstract">Abstract</a>
+      <a href="#video">Video</a>
+      <a href="#method">Method</a>
+      <a href="#setup">Setup</a>
+      <a href="#results">Results</a>
+      <a href="#scope">Scope</a>
+      <a href="#code">Code</a>
+      <a href="#bibtex">BibTeX</a>
+    </nav>
+  </header>
+
+  <section id="abstract">
+    <h2>Abstract</h2>
+    <p>Fusing the feature, object, and spatial information of multiple cameras with different orientations
+    and fields of view into a common representation such as a bird's-eye view (BEV) requires every camera
+    observation to be aligned to the physical vehicle frame <code>base_link</code>. Under a simple ray model,
+    a 1&deg; yaw mounting error already induces a lateral deviation of about 0.52 m at 30 m ahead.
+    This work addresses offline precise extrinsic calibration performed before driving &mdash; after
+    production, maintenance, impact, or sensor replacement &mdash; rather than online calibration that
+    compensates for sensor drift while driving.</p>
+
+    <p>The core problem in this setting is to produce physical <code>base_link&rarr;camera</code> extrinsics
+    for vehicle cameras that cannot observe a common target or scene feature simultaneously, without moving
+    the target vehicle, without camera-pair pre-calibration, and without precision metrology equipment.
+    We propose an uncertainty-aware 2-stage hierarchical factor graph optimization (FGO) framework.
+    An existing corner-to-pose uncertainty propagation yields the full 6&times;6 covariance of a marker pose
+    from the corner uncertainty of a single image, and its inverse is applied as an observation-wise
+    information matrix to every camera-to-marker (C&rarr;M) factor in both stages.
+    Vehicle-independent environment state and vehicle-specific calibration state are separated: Stage 1
+    builds and freezes an environment marker map from the multi-view observations of a single movable
+    auxiliary camera, and Stage 2 &mdash; together with any subsequent calibration in the same physical
+    marker layout &mdash; reuses this fixed map to register the vehicle cameras and the wheel markers,
+    producing the physical <code>base_link&rarr;camera</code> extrinsics defined by the wheel-marker geometry
+    and the camera-to-camera relative extrinsics derived from them.</p>
+
+    <p>In an ablation that keeps the source images, C&rarr;M observations, graph, initialization, and optimizer
+    fixed and changes only the information matrix, the proposed weighting attained the lowest rotation,
+    translation, and reprojection RMSE in all nine combinations of three rigs and three noise conditions.
+    In a separate structural comparison under 1 px corner noise, it also attained a lower rotation and
+    translation GT RMSE of the physical <code>base_link</code>-referenced extrinsics than Chain on all three
+    simulation rigs. On eight real-vehicle cameras with overlapping fields of view and no absolute ground
+    truth, the proposed weighting attained the lowest reprojection RMSE and residual standard deviation at
+    each of five stationary poses, as well as the lowest cross-pose median reprojection RMSE. Reusing the
+    frozen map, the Stage 2 optimization time was 61.4% shorter than <code>full_joint</code> on the simulated
+    IONIQ rig and 63.2% shorter on the real IONIQ rig.</p>
+
+    <p class="note"><strong>Index terms:</strong> multi-camera extrinsic calibration, camera-to-vehicle
+    calibration, reusable marker map, hierarchical factor graph optimization, uncertainty-aware marker pose
+    estimation.</p>
+  </section>
+
+  <section id="video">
+    <h2>Supplementary Video</h2>
+    <div class="video-box">
+      <p class="placeholder"><span class="todo">TODO</span> No supplementary video is attached yet.</p>
+      <!-- To enable the video, put supplementary.mp4 (and video_poster.jpg) in assets/,
+           then replace the placeholder paragraph above with the markup below.
+      <video controls preload="metadata" poster="assets/video_poster.jpg">
+        <source src="assets/supplementary.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      -->
+    </div>
+    <p class="note">Before attaching any real-vehicle footage, check every frame for faces, license plates,
+    name tags, institutional logos, and facility marks, and strip the file metadata.</p>
+  </section>
+
+  <section id="method">
+    <h2>Method Overview</h2>
+    <figure>
+      <img src="assets/method_overview.png" alt="Two-stage hierarchical calibration pipeline: environment map construction, map freezing, and repeated vehicle-to-camera calibration">
+      <figcaption><strong>Fig. 1.</strong> Pipeline. Stage 1 estimates the environment marker map once from
+      the multi-view observations of a single auxiliary camera and freezes it. Stage 2 reuses the frozen map
+      as a fixed input and estimates only the vehicle-specific state, ending in the
+      <code>base_link&rarr;camera</code> extrinsics. Every camera-to-marker edge carries its own information
+      matrix obtained from the single-image marker pose covariance.</figcaption>
+    </figure>
+
+    <p>The framework is defined by the following sequence. The same C&rarr;M observation model is used in
+    both stages, so the graph does not change with the field-of-view overlap of the vehicle cameras.</p>
+
+    <ol>
+      <li><strong>Observation-wise information matrix.</strong> For each image, the camera-to-marker pose is
+      computed with the pinhole or Kannala&ndash;Brandt projection model. A single-image corner uncertainty is
+      propagated to a full 6&times;6 covariance of the marker 6-DoF pose, and the inverse of that covariance is
+      used as the information matrix of the corresponding C&rarr;M factor. The unit of the covariance is the
+      marker pose obtained from one image, not a corner and not a pairwise calibration result.</li>
+
+      <li><strong>Stage 1 &mdash; environment map construction.</strong> A single auxiliary camera is moved to
+      several positions and observes the environment markers. One reference marker is fixed as the gauge
+      anchor, and the environment marker poses together with the per-image auxiliary camera poses are
+      optimized into a vehicle-independent environment map.</li>
+
+      <li><strong>Map freezing.</strong> When the Stage 1 optimization terminates, the estimated environment
+      marker poses are stored as the environment map and frozen.</li>
+
+      <li><strong>Stage 2 &mdash; fixed-map vehicle calibration.</strong> The environment marker poses are no
+      longer estimated. Two connection paths share the one fixed map: the environment-marker observations of
+      each vehicle camera place that camera directly in the common environment, and the path
+      <code>environment map &rarr; auxiliary camera &rarr; wheel markers</code> places the four wheel markers in
+      the same frame. Vehicle cameras that do not overlap each other are therefore combined in a single
+      environment frame without any camera-pair pre-calibration. Marker-to-marker relative poses are used
+      only for BFS initialization and are never added as optimization factors.</li>
+
+      <li><strong>Physical <code>base_link</code> definition.</strong> <code>base_link</code> is computed from
+      the four optimized wheel markers. Its axes follow the ISO 8855 convention (+x forward, +y left, +z up)
+      and its origin is the midpoint of the two rear wheel-marker centers.</li>
+
+      <li><strong>Extrinsic output.</strong> Each vehicle camera pose estimated in the common environment is
+      converted into a <code>base_link&rarr;camera</code> extrinsic. The relative extrinsic between any two
+      cameras is obtained by composing the two <code>base_link&rarr;camera</code> transforms.</li>
+    </ol>
+
+    <figure>
+      <img src="assets/graph_structure.png" alt="Three factor graphs: environment graph, environment-and-wheel graph, and vehicle camera graph">
+      <figcaption><strong>Fig. 2.</strong> Optimized graphs of one simulation run. (a) Stage 1 environment
+      graph: 12 environment markers, 96 auxiliary camera poses, 232 camera&rarr;marker edges. (b) Wheel
+      registration on the frozen map: 4 wheel markers, 16 wheel camera poses, 66 edges. (c) Vehicle camera
+      registration: 8 vehicle cameras, 14 edges. The marker nodes of (a) stay fixed in (b) and (c).</figcaption>
+    </figure>
+  </section>
+
+  <section id="setup">
+    <h2>Experimental Setup</h2>
+
+    <figure>
+      <img src="assets/sim_setup.png" alt="Simulated calibration environment with a vehicle, environment marker boards, and wheel markers">
+      <figcaption><strong>Fig. 3.</strong> Simulated calibration environment. The vehicle is stationary,
+      environment markers surround it, and one wheel marker is clamped to each wheel. The real-vehicle
+      environment follows the same layout; its photograph is omitted from this page for anonymity.</figcaption>
+    </figure>
+
+    <p>Three simulated vehicle and camera configurations are reproduced in IPG CarMaker, and one real-vehicle
+    session is used as an operational check.</p>
+
+    <div class="table-scroll">
+      <table>
+        <caption>Vehicle and camera configurations</caption>
+        <thead>
+          <tr><th>Configuration</th><th class="l">Cameras</th><th class="l">Projection models</th><th class="l">Role</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>nuPlan-based (sim.)</td><td class="l">8</td><td class="l">pinhole, HFoV &asymp; 63.7&deg;</td><td class="l">absolute GT accuracy</td></tr>
+          <tr><td>PAI-based (sim.)</td><td class="l">7</td><td class="l">3 equidistant (HFoV &asymp; 119&deg;), 4 pinhole</td><td class="l">absolute GT accuracy</td></tr>
+          <tr><td>IONIQ (sim.)</td><td class="l">10</td><td class="l">8 equidistant, 2 pinhole</td><td class="l">absolute GT accuracy, timing</td></tr>
+          <tr><td>IONIQ (real)</td><td class="l">10 mounted, 8 evaluated</td><td class="l">6 pinhole, 4 KB fisheye</td><td class="l">real-image consistency, timing</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">The three simulated rigs are the only configurations with ground-truth extrinsics, so
+    every absolute accuracy number below comes from them. The real IONIQ session evaluates 8 of the 10
+    mounted cameras (the two telephoto cameras are excluded) and uses 96 environment images, 40 wheel images,
+    and 8 vehicle images per pose over five stationary poses. Those 8 cameras have overlapping fields of view.</p>
+
+    <figure>
+      <img src="assets/marker_config.png" alt="AprilGrid layout and AprilTag geometry definitions">
+      <figcaption><strong>Fig. 4.</strong> Marker configuration. Each board is a 2&times;2 AprilGrid of
+      <code>tagStandard41h12</code> tags; board size, center-to-center distance, tag size, and cell size are
+      defined as shown.</figcaption>
+    </figure>
+
+    <h3>Compared weightings and baselines</h3>
+    <ul>
+      <li><strong>Proposed</strong> &mdash; the inverse of the single-image marker pose covariance, applied
+      per observation.</li>
+      <li><strong>Geom-&sigma;</strong> &mdash; a projection-geometry scalar weight based on projected area,
+      viewing angle, and radial distance from the principal point, following the published formula without
+      any grid search tuned to our results.</li>
+      <li><strong>Fixed-&sigma;</strong> &mdash; one common information matrix shared by every C&rarr;M
+      observation.</li>
+      <li><strong>Chain</strong> &mdash; a structural baseline that composes the extrinsics along a chain
+      instead of a single joint graph. It is compared on the same stationary data and noise condition.</li>
+      <li><strong><code>full_joint</code></strong> &mdash; a timing baseline that estimates the environment
+      markers, wheel markers, auxiliary cameras, and vehicle cameras in one run with no pre-frozen map.</li>
+    </ul>
+    <p class="note">The three weightings are compared as an ablation: the source images, C&rarr;M
+    measurements, observation set, graph structure, initialization, optimizer, and noise realization are all
+    held fixed, and only the factor information matrix changes. Chain and <code>full_joint</code> are not part
+    of that ablation; they are separate structural and timing baselines.</p>
+  </section>
+
+  <section id="results">
+    <h2>Results</h2>
+
+    <h3>Information-matrix ablation (simulation)</h3>
+    <div class="table-scroll">
+      <table>
+        <caption>Absolute <code>base_link&rarr;camera</code> error and reprojection error, R [deg] / T [mm] / P [px]</caption>
+        <thead>
+          <tr>
+            <th>Configuration</th><th class="l">ENV noise</th><th class="l">WHEEL / VEHICLE noise</th>
+            <th>Proposed R / T / P</th><th>Geom-&sigma; R / T / P</th><th>Fixed-&sigma; R / T / P</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>nuPlan-based</td><td class="l">none</td><td class="l">none</td><td class="best">0.017 / 1.315 / 0.040</td><td>0.074 / 3.054 / 0.132</td><td>0.094 / 3.434 / 0.149</td></tr>
+          <tr><td>nuPlan-based</td><td class="l">none</td><td class="l">std&nbsp;=&nbsp;1&nbsp;px</td><td class="best">0.697 / 41.359 / 2.045</td><td>1.810 / 87.073 / 2.817</td><td>2.023 / 103.262 / 2.988</td></tr>
+          <tr><td>nuPlan-based</td><td class="l">std&nbsp;=&nbsp;1&nbsp;px</td><td class="l">std&nbsp;=&nbsp;1&nbsp;px</td><td class="best">0.648 / 38.519 / 1.978</td><td>1.686 / 105.345 / 3.707</td><td>1.883 / 125.459 / 3.942</td></tr>
+          <tr><td>PAI-based</td><td class="l">none</td><td class="l">none</td><td class="best">0.019 / 1.480 / 0.138</td><td>0.072 / 3.783 / 0.371</td><td>0.077 / 4.125 / 0.329</td></tr>
+          <tr><td>PAI-based</td><td class="l">none</td><td class="l">std&nbsp;=&nbsp;1&nbsp;px</td><td class="best">0.631 / 24.027 / 1.210</td><td>1.608 / 137.955 / 3.338</td><td>1.925 / 138.853 / 3.144</td></tr>
+          <tr><td>PAI-based</td><td class="l">std&nbsp;=&nbsp;1&nbsp;px</td><td class="l">std&nbsp;=&nbsp;1&nbsp;px</td><td class="best">0.582 / 22.992 / 1.230</td><td>2.402 / 135.557 / 6.332</td><td>2.165 / 146.648 / 7.483</td></tr>
+          <tr><td>IONIQ</td><td class="l">none</td><td class="l">none</td><td class="best">0.033 / 1.519 / 0.157</td><td>0.072 / 4.302 / 0.354</td><td>0.066 / 5.129 / 0.384</td></tr>
+          <tr><td>IONIQ</td><td class="l">none</td><td class="l">std&nbsp;=&nbsp;1&nbsp;px</td><td class="best">0.321 / 23.238 / 1.283</td><td>0.742 / 39.981 / 1.953</td><td>0.642 / 49.686 / 2.436</td></tr>
+          <tr><td>IONIQ</td><td class="l">std&nbsp;=&nbsp;1&nbsp;px</td><td class="l">std&nbsp;=&nbsp;1&nbsp;px</td><td class="best">0.386 / 25.233 / 1.355</td><td>1.014 / 57.149 / 2.863</td><td>1.102 / 74.140 / 4.518</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">R and T are RMSE against the ground-truth <code>base_link&rarr;camera</code> extrinsics;
+    P is a reprojection-consistency RMSE computed by taking the mean corner residual of every board
+    observation and then the RMS of those values. Noise is Gaussian noise of the stated standard deviation
+    added to the detected corner coordinates. The proposed weighting is the smallest in all nine rows and in
+    all three metrics; the table reports these nine configuration&ndash;noise combinations only, and no
+    independent repetition or hypothesis test is defined, so no statistical significance is claimed.</p>
+
+    <h3>Structural comparison against Chain (simulation)</h3>
+    <div class="table-scroll">
+      <table>
+        <caption>Absolute <code>base_link&rarr;camera</code> GT error under 1 px corner noise on both ENV and WHEEL / VEHICLE</caption>
+        <thead>
+          <tr><th>Configuration</th><th>Proposed R [deg] / T [mm]</th><th>Chain R [deg] / T [mm]</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>nuPlan-based</td><td class="best">0.648 / 38.519</td><td>6.627 / 264.728</td></tr>
+          <tr><td>PAI-based</td><td class="best">0.582 / 22.992</td><td>4.960 / 199.033</td></tr>
+          <tr><td>IONIQ</td><td class="best">0.386 / 25.233</td><td>2.031 / 76.557</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">This comparison concerns the graph structure, not the information matrix: both methods run
+    on the same stationary data and noise condition. No separate experiment varies the chain length, so no
+    trend of error against chain length is claimed.</p>
+
+    <h3>Stage 1 environment map quality (simulation)</h3>
+    <div class="table-scroll">
+      <table>
+        <caption>Environment marker error of the Stage 1 map against ground truth</caption>
+        <thead>
+          <tr><th>Configuration</th><th>No noise R [deg] / T [mm]</th><th>ENV corner std = 1 px, R [deg] / T [mm]</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>nuPlan-based</td><td>0.007 / 0.390</td><td>0.210 / 10.293</td></tr>
+          <tr><td>PAI-based</td><td>0.006 / 0.398</td><td>0.187 / 7.790</td></tr>
+          <tr><td>IONIQ</td><td>0.003 / 0.219</td><td>0.252 / 13.295</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">This table reports how close the map built without precision metrology equipment is to
+    ground truth. No absolute acceptance threshold is defined, and no comparison between methods is intended.
+    The real-vehicle environment has no marker ground truth, so map quality is supported by simulation only.</p>
+
+    <h3>Optimization time with map reuse</h3>
+    <div class="table-scroll">
+      <table>
+        <caption>Subsequent-calibration optimization time</caption>
+        <thead>
+          <tr><th>Condition</th><th><code>full_joint</code> [s]</th><th>Stage 2 on frozen map [s]</th><th>Reduction [s]</th><th>Reduction</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>IONIQ (simulation)</td><td>7.311</td><td>2.822</td><td>4.489</td><td class="best">61.4%</td></tr>
+          <tr><td>IONIQ (real)</td><td>15.541</td><td>5.720</td><td>9.821</td><td class="best">63.2%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">These are optimization times of one subsequent calibration, measured on the IONIQ rig
+    only. They are not data acquisition times, not a demonstration of several vehicles calibrated in
+    sequence, and not a claim of accuracy equivalence with <code>full_joint</code>.
+    <span class="todo">TODO</span> Report the CPU, memory, and solver versions used for these measurements.</p>
+
+    <h3>Real-vehicle consistency (no absolute ground truth)</h3>
+    <div class="table-scroll">
+      <table>
+        <caption>Reprojection RMSE and residual standard deviation per stationary pose [px]</caption>
+        <thead>
+          <tr><th>Pose</th><th>Proposed RMSE / std</th><th>Geom-&sigma; RMSE / std</th><th>Fixed-&sigma; RMSE / std</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Pose 1</td><td class="best">2.098 / 1.768</td><td>2.721 / 1.886</td><td>2.681 / 1.893</td></tr>
+          <tr><td>Pose 2</td><td class="best">1.101 / 0.796</td><td>2.313 / 1.441</td><td>2.556 / 1.556</td></tr>
+          <tr><td>Pose 3</td><td class="best">2.144 / 1.780</td><td>2.888 / 2.093</td><td>2.842 / 2.058</td></tr>
+          <tr><td>Pose 4</td><td class="best">1.410 / 1.094</td><td>2.489 / 1.683</td><td>2.452 / 1.628</td></tr>
+          <tr><td>Pose 5</td><td class="best">1.416 / 1.046</td><td>2.214 / 1.389</td><td>2.040 / 1.284</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-scroll">
+      <table>
+        <caption>Cross-pose median reprojection RMSE on the frozen map [px]</caption>
+        <thead>
+          <tr><th>Optimization scope</th><th>Proposed</th><th>Geom-&sigma;</th><th>Fixed-&sigma;</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Stage 2 on frozen map</td><td class="best">1.97</td><td>2.37</td><td>2.29</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">The cross-pose score fixes the camera extrinsics estimated at a source pose, re-fits only
+    the 6-DoF vehicle pose at each of the other four poses by unweighted least squares, and reports the median
+    of the 20 ordered scores. Both tables measure consistency on real images, not absolute extrinsic accuracy:
+    the real session has no environment-marker or extrinsic ground truth, and its 8 evaluated cameras have
+    overlapping fields of view, so these numbers are not evidence for non-overlapping performance either.</p>
+  </section>
+
+  <section id="scope">
+    <h2>Scope and Limitations</h2>
+
+    <h3>Assumptions</h3>
+    <ul>
+      <li>Camera intrinsics and projection models are known in advance.</li>
+      <li>Marker IDs, the internal AprilGrid geometry, and the rigidity of each marker board are known.</li>
+      <li>The auxiliary camera can be moved to several positions; the vehicle under calibration stays
+      stationary.</li>
+      <li>Each vehicle camera observes environment markers and can therefore be linked to the frozen map.
+      Direct overlap between vehicle cameras is not required.</li>
+      <li>The physical layout of the environment markers does not change while the frozen map is reused.</li>
+      <li>Wheel markers are rigidly clamped and are re-observed and re-estimated for every vehicle.</li>
+    </ul>
+
+    <h3>What is not claimed</h3>
+    <ul>
+      <li>No novelty is claimed for data-driven information matrices in general, for 6&times;6 pose covariance
+      estimation itself, for marker-infrastructure reuse, or for unified graphs that remove pairwise
+      pre-calibration.</li>
+      <li>No accuracy equivalence between the frozen-map hierarchical run and <code>full_joint</code> is
+      claimed.</li>
+      <li>No standard-benchmark SOTA ranking is claimed. The nuPlan and PAI camera configurations are
+      reproduced in simulation, and the original datasets are not used as benchmarks.</li>
+      <li>No statistical significance is claimed, and no online extrinsic update, frame rate, or real-time
+      inference is claimed.</li>
+    </ul>
+
+    <h3>Known limitations</h3>
+    <ul>
+      <li>The real session has no absolute ground truth for the environment markers or the vehicle
+      extrinsics.</li>
+      <li>The 8 evaluated real cameras have overlapping fields of view, so the real data provides no
+      non-overlapping evidence.</li>
+      <li>An error in the environment map propagates in common to every subsequent vehicle that shares that
+      map.</li>
+      <li>Marker printing tolerance, board flatness, intrinsic residuals, and wheel-clamp mounting error may
+      not be fully represented by single-image corner randomness alone.</li>
+      <li>The double-solution ambiguity of planar markers can affect candidate selection, refinement, and
+      failure handling.</li>
+      <li>Some equidistant cameras in the IONIQ simulation reproduce the horizontal field of view of real
+      wide-angle pinhole cameras, but the projection geometry differs, so those results are not transferred
+      to real wide-angle pinhole performance.</li>
+      <li>Joint calibration of intrinsics, time synchronization, rolling shutter, and LiDAR extrinsics is out
+      of scope, as is detecting or updating a changed environment map.</li>
+    </ul>
+  </section>
+
+  <section id="code">
+    <h2>Code</h2>
+    <p><span class="todo">TODO</span> Point to the anonymized repository or the anonymous mirror, and delete
+    whichever line does not apply. Before release, check the repository for author names, institutional
+    paths, host names, and user directories in code, configs, logs, and commit history.</p>
+    <pre><code>Repository: https://github.com/&lt;anon-account&gt;/&lt;anon-repo&gt;
+Mirror:     https://anonymous.4open.science/r/&lt;anon-id&gt;</code></pre>
+  </section>
+
+  <section id="bibtex">
+    <h2>BibTeX</h2>
+    <pre><code>@misc{anonymous2027,
+  title  = {Uncertainty-Aware Hierarchical Factor Graph Optimization for
+            Multi-Camera Extrinsic Calibration of Autonomous Vehicles},
+  author = {Anonymous},
+  note   = {Under review at IEEE ICRA 2027},
+  year   = {2026}
+}</code></pre>
+  </section>
+
+  <footer>
+    Anonymous supplementary page &middot; no tracking, no analytics, no external requests.
+  </footer>
+
+</div>
+</body>
+</html>
