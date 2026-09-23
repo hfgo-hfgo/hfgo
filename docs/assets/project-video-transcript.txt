@@ -1,0 +1,61 @@
+# English narration script
+
+## 00:00 — Multi-camera calibration for a stationary vehicle
+
+Uncertainty-Aware Hierarchical Factor Graph Optimization for Multi-Camera Extrinsic Calibration of Autonomous Vehicles.
+
+## 00:09 — Build once. Calibrate again.
+
+First, we build an environmental marker map. We then reuse the map and its uncertainty to calibrate the vehicle cameras.
+
+## 00:17 — Move the auxiliary camera around the markers
+
+An auxiliary camera photographs environmental markers from several viewpoints. When the same markers appear in different images, those observations connect the viewpoints. This lets us estimate a map without surveying marker poses beforehand.
+
+## 00:31 — A detected corner is not an exact point
+
+We analyze image gradients around each detected corner. These gradients form a two-by-two matrix that describes local image structure. Its inverse, scaled by the assumed image-noise variance, gives the corner covariance.
+
+## 00:45 — Propagate pixel uncertainty into pose uncertainty
+
+The unscented transform creates representative corner sets from the estimated corner uncertainties. A P N P solver estimates a pose for each set. Weighted deviations from the original pose estimate give the pose covariance. The matrix shows correlations among the six pose components.
+
+## 01:03 — Let uncertainty determine the influence
+
+Each marker observation becomes a graph factor. Its inverse pose covariance assigns less weight to directions with greater uncertainty.
+
+## 01:12 — Optimize the map. Preserve its information.
+
+We optimize the camera and marker poses while fixing one reference marker. We then marginalize out the auxiliary camera poses, retaining their information in a correlated map prior.
+
+## 01:24 — Build the map once. Reuse it for later sessions.
+
+If environmental markers stay fixed, later sessions reuse the map prior. They use new images from the auxiliary and vehicle cameras.
+
+## 01:33 — Connect the wheel markers to the map
+
+The auxiliary camera now captures environmental and wheel markers together. These observations connect all four wheels to the map. The wheel marker centers define the vehicle frame, whose origin is the midpoint between the rear markers.
+
+## 01:47 — Different views. The same environmental map.
+
+Each vehicle camera observes environmental markers using its pinhole or fisheye model. The cameras need not see the same markers or any wheel markers, provided the graph remains connected.
+
+## 01:59 — One connected graph → vehicle-frame extrinsics
+
+We jointly optimize the poses using the new observations and the map prior. All environmental marker estimates can adjust except the fixed reference marker. We then express each vehicle camera's position and orientation in the vehicle frame.
+
+## 02:14 — Three camera rigs. Four comparison methods.
+
+Across three CarMaker rigs, ours wins all nine tests against Geom sigma and Fixed sigma, and all three one-pixel tests against Chain.
+
+## 02:23 — Five stationary poses. Repeatable calibration.
+
+Across five poses, ours has the lowest camera-to-camera position and rotation dispersion. This measures repeatability, not absolute accuracy. The views show reprojection errors in pixels.
+
+## 02:35 — Uncertainty-aware calibration. A reusable map.
+
+With one-pixel noise, mean errors are zero point six one four degrees and thirty-eight point five millimeters. Map reuse cuts subsequent optimization by sixty-three point two percent.
+
+## 02:45 — Thank you for watching.
+
+Thank you for watching.
